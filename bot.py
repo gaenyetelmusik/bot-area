@@ -33,6 +33,8 @@ KORDINAT : {result[6]}
 
         update.message.reply_text(balasan)
 
+print("TOKEN:", TOKEN)
+
 def main():
     updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
@@ -41,4 +43,5 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
 
