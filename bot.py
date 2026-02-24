@@ -1,3 +1,5 @@
+print("BOT STARTED")
+
 import sqlite3
 from telegram.ext import Updater, MessageHandler, Filters
 
@@ -43,5 +45,6 @@ def main():
 
     updater.start_polling()
     updater.idle()
+
 
 
