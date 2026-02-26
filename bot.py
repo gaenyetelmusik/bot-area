@@ -95,8 +95,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
 
             update.message.reply_text(balasan)
 
-    else:
-        update.message.reply_text("Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO")
+
 
 
 print("TOKEN:", TOKEN)
@@ -114,3 +113,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
