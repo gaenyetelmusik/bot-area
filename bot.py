@@ -48,9 +48,17 @@ KORDINAT : {result[6]}
         if len(parts) >= 2:
             kode = parts[1]
 
-            # Ambil periode otomatis (contoh: 2602)
+            # Ambil periode otomatis (format: yymm, contoh 2603)
             now = datetime.datetime.now()
             periode = now.strftime("%y%m")
+
+            # Ambil nama bulan Bahasa Indonesia
+            tahun = int("20" + periode[:2])
+            bulan = int(periode[2:])
+            nama_bulan = [
+                "JANUARI","FEBRUARI","MARET","APRIL","MEI","JUNI",
+                "JULI","AGUSTUS","SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"
+            ][bulan-1]
 
             nama_file_even = f"EVEN_{periode}.DB"
 
@@ -58,7 +66,7 @@ KORDINAT : {result[6]}
                 conn = sqlite3.connect("toko.db")
                 cursor = conn.cursor()
 
-                # Attach database
+                # Attach database tambahan
                 cursor.execute(f"ATTACH DATABASE '{nama_file_even}' AS even_db")
                 cursor.execute("ATTACH DATABASE 'RITSBY.DB' AS rit_db")
 
@@ -84,6 +92,7 @@ KORDINAT : {result[6]}
                     balasan = f"""
 TOKO        : {result[0]}
 NAMA        : {result[1]}
+PERIODE     : {nama_bulan}
 TGL EVEN    : {result[2]}
 JADWAL KIRIM: {result[3]} {result[4]}
 """
@@ -95,7 +104,10 @@ JADWAL KIRIM: {result[3]} {result[4]}
 
             update.message.reply_text(balasan)
 
-
+    else:
+        update.message.reply_text(
+            "Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO"
+        )
 
 
 print("TOKEN:", TOKEN)
@@ -113,4 +125,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
