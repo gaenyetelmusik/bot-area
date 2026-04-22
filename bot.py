@@ -158,9 +158,73 @@ JADWAL KIRIM: {result[3]} {result[4]}
         
         update.message.reply_text(balasan)
 
+        # ======================
+    # CASE DAYEVEN
+    # ======================
+    elif text.startswith("DAYEVEN "):
+        parts = text.split()
+        
+        if len(parts) >= 2:
+            tgl_yang_dicari = parts[1]  # contoh: "21" atau "23"
+            
+            # Validasi: pastikan input adalah angka 1-31
+            if not tgl_yang_dicari.isdigit() or int(tgl_yang_dicari) < 1 or int(tgl_yang_dicari) > 31:
+                balasan = "❌ Format salah! Gunakan: DAYEVEN 21 (angka 1-31)"
+                update.message.reply_text(balasan)
+                return
+            
+            # Ambil periode otomatis (format: yymm, contoh 2604)
+            now = datetime.datetime.now()
+            periode = now.strftime("%y%m")
+            nama_file_even = f"EVEN_{periode}.DB"
+            nama_bulan = [
+                "JANUARI","FEBRUARI","MARET","APRIL","MEI","JUNI",
+                "JULI","AGUSTUS","SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"
+            ][now.month-1]
+            
+            try:
+                conn = sqlite3.connect("toko.db")
+                cursor = conn.cursor()
+                
+                # Attach database even
+                cursor.execute(f"ATTACH DATABASE '{nama_file_even}' AS even_db")
+                
+                # Query mencari toko yang punya even pada tanggal yang diminta
+                query = f"""
+                SELECT 
+                    TOKO,
+                    NAMA
+                FROM even_db.EVEN_{periode}
+                WHERE TGL = ?
+                ORDER BY TOKO
+                """
+                
+                cursor.execute(query, (tgl_yang_dicari,))
+                results = cursor.fetchall()
+                conn.close()
+                
+                if results:
+                    # Format balasan
+                    balasan = f"📅 EVEN TANGGAL {tgl_yang_dicari} {nama_bulan} {now.year}\n"
+                    balasan += "=" * 35 + "\n\n"
+                    
+                    for row in results:
+                        balasan += f"🏪 {row[0]} - {row[1]}\n"
+                    
+                    # Tambahkan total toko
+                    balasan += f"\n✅ Total toko: {len(results)}"
+                else:
+                    balasan = f"❌ Tidak ada toko yang memiliki jadwal even pada tanggal {tgl_yang_dicari} {nama_bulan} {now.year}"
+            
+            except Exception as e:
+                balasan = f"Terjadi error: {str(e)}"
+            
+            update.message.reply_text(balasan)
+        else:
+            update.message.reply_text("❌ Format salah! Gunakan: DAYEVEN 21")
     else:
         update.message.reply_text(
-            "Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO\nTODAYEVEN"
+            "Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO\nTODAYEVEN\nDAYEVEN TGL"
         )
 
 
