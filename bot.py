@@ -104,9 +104,63 @@ JADWAL KIRIM: {result[3]} {result[4]}
 
             update.message.reply_text(balasan)
 
+    # ======================
+    # CASE TODAYEVEN
+    # ======================
+    elif text.startswith("TODAYEVEN"):
+        # Ambil tanggal hari ini (hanya angka tanggal, 1-31)
+        now = datetime.datetime.now()
+        today_day = str(now.day)  # contoh: "23" (tanpa leading zero, sesuai database Anda)
+        periode = now.strftime("%y%m")  # contoh: "2604"
+        
+        nama_file_even = f"EVEN_{periode}.DB"
+        nama_bulan = [
+            "JANUARI","FEBRUARI","MARET","APRIL","MEI","JUNI",
+            "JULI","AGUSTUS","SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"
+        ][now.month-1]
+        
+        try:
+            conn = sqlite3.connect("toko.db")
+            cursor = conn.cursor()
+            
+            # Attach database even
+            cursor.execute(f"ATTACH DATABASE '{nama_file_even}' AS even_db")
+            
+            # Query mencari toko yang punya even hari ini (TGL = tanggal hari ini)
+            query = f"""
+            SELECT 
+                TOKO,
+                NAMA
+            FROM even_db.EVEN_{periode}
+            WHERE TGL = ?
+            ORDER BY TOKO
+            """
+            
+            cursor.execute(query, (today_day,))
+            results = cursor.fetchall()
+            conn.close()
+            
+            if results:
+                # Format balasan
+                balasan = f"📅 EVEN HARI INI ({now.day} {nama_bulan} {now.year})\n"
+                balasan += "=" * 30 + "\n\n"
+                
+                for row in results:
+                    balasan += f"🏪 {row[0]} - {row[1]}\n"
+                
+                # Tambahkan total toko
+                balasan += f"\n✅ Total toko: {len(results)}"
+            else:
+                balasan = f"❌ Tidak ada toko yang memiliki jadwal even pada tanggal {now.day} {nama_bulan} {now.year}"
+        
+        except Exception as e:
+            balasan = f"Terjadi error: {str(e)}"
+        
+        update.message.reply_text(balasan)
+
     else:
         update.message.reply_text(
-            "Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO"
+            "Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO\nTODAYEVEN"
         )
 
 
