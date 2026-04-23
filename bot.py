@@ -2,10 +2,14 @@ print("BOT STARTED")
 
 import sqlite3
 import datetime
+import pytz
 from telegram.ext import Updater, MessageHandler, Filters
 import os
 
 TOKEN = os.environ.get("TOKEN")
+
+# Zona waktu Indonesia (WIB = UTC+7)
+WIB = pytz.timezone('Asia/Jakarta')
 
 
 def handle_message(update, context):
@@ -48,12 +52,11 @@ KORDINAT : {result[6]}
         if len(parts) >= 2:
             kode = parts[1]
 
-            # Ambil periode otomatis (format: yymm, contoh 2603)
-            now = datetime.datetime.now()
+            # Ambil waktu sekarang dalam WIB
+            now = datetime.datetime.now(WIB)
             periode = now.strftime("%y%m")
 
             # Ambil nama bulan Bahasa Indonesia
-            tahun = int("20" + periode[:2])
             bulan = int(periode[2:])
             nama_bulan = [
                 "JANUARI","FEBRUARI","MARET","APRIL","MEI","JUNI",
@@ -108,9 +111,9 @@ JADWAL KIRIM: {result[3]} {result[4]}
     # CASE TODAYEVEN
     # ======================
     elif text.startswith("TODAYEVEN"):
-        # Ambil tanggal hari ini (hanya angka tanggal, 1-31)
-        now = datetime.datetime.now()
-        today_day = str(now.day)  # contoh: "23" (tanpa leading zero, sesuai database Anda)
+        # Ambil waktu sekarang dalam WIB
+        now = datetime.datetime.now(WIB)
+        today_day = str(now.day)  # tanggal (1-31)
         periode = now.strftime("%y%m")  # contoh: "2604"
         
         nama_file_even = f"EVEN_{periode}.DB"
@@ -148,7 +151,6 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 for row in results:
                     balasan += f"🏪 {row[0]} - {row[1]}\n"
                 
-                # Tambahkan total toko
                 balasan += f"\n✅ Total toko: {len(results)}"
             else:
                 balasan = f"❌ Tidak ada toko yang memiliki jadwal even pada tanggal {now.day} {nama_bulan} {now.year}"
@@ -158,7 +160,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
         
         update.message.reply_text(balasan)
 
-        # ======================
+    # ======================
     # CASE DAYEVEN
     # ======================
     elif text.startswith("DAYEVEN "):
@@ -173,8 +175,8 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 update.message.reply_text(balasan)
                 return
             
-            # Ambil periode otomatis (format: yymm, contoh 2604)
-            now = datetime.datetime.now()
+            # Ambil waktu sekarang dalam WIB
+            now = datetime.datetime.now(WIB)
             periode = now.strftime("%y%m")
             nama_file_even = f"EVEN_{periode}.DB"
             nama_bulan = [
@@ -211,7 +213,6 @@ JADWAL KIRIM: {result[3]} {result[4]}
                     for row in results:
                         balasan += f"🏪 {row[0]} - {row[1]}\n"
                     
-                    # Tambahkan total toko
                     balasan += f"\n✅ Total toko: {len(results)}"
                 else:
                     balasan = f"❌ Tidak ada toko yang memiliki jadwal even pada tanggal {tgl_yang_dicari} {nama_bulan} {now.year}"
@@ -222,9 +223,14 @@ JADWAL KIRIM: {result[3]} {result[4]}
             update.message.reply_text(balasan)
         else:
             update.message.reply_text("❌ Format salah! Gunakan: DAYEVEN 21")
+
     else:
         update.message.reply_text(
-            "Format tidak dikenali.\nGunakan:\nAREA KODETOKO\nEVEN KODETOKO\nTODAYEVEN\nDAYEVEN TGL"
+            "Format tidak dikenali.\nGunakan:\n"
+            "AREA KODETOKO\n"
+            "EVEN KODETOKO\n"
+            "TODAYEVEN\n"
+            "DAYEVEN 21"
         )
 
 
