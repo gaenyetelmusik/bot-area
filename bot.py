@@ -147,7 +147,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 # Format balasan
                 jam_sekarang = now.strftime("%H:%M:%S")
                 balasan = f"📅 EVEN HARI INI ({now.day} {nama_bulan} {now.year})\n"
-                balasan += f"⏰ Waktu: {jam_sekarang} bukan_WIB\n"
+                balasan += f"⏰ Waktu: {jam_sekarang} WIB\n"
                 balasan += "=" * 30 + "\n\n"
                 
                 for row in results:
