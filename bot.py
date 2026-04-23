@@ -13,11 +13,6 @@ WIB = pytz.timezone('Asia/Jakarta')
 
 
 def handle_message(update, context):
-    # DEBUG: cek waktu
-    now_utc = datetime.datetime.now()
-    now_wib = datetime.datetime.now(WIB)
-    print(f"DEBUG UTC: {now_utc}")
-    print(f"DEBUG WIB: {now_wib}")
     text = update.message.text.strip().upper()
 
     # ======================
@@ -150,7 +145,9 @@ JADWAL KIRIM: {result[3]} {result[4]}
             
             if results:
                 # Format balasan
+                jam_sekarang = now.strftime("%H:%M:%S")
                 balasan = f"📅 EVEN HARI INI ({now.day} {nama_bulan} {now.year})\n"
+                balasan += f"⏰ Waktu: {jam_sekarang} bukan_WIB\n"
                 balasan += "=" * 30 + "\n\n"
                 
                 for row in results:
