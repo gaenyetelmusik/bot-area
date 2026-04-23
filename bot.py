@@ -13,6 +13,11 @@ WIB = pytz.timezone('Asia/Jakarta')
 
 
 def handle_message(update, context):
+    # DEBUG: cek waktu
+    now_utc = datetime.datetime.now()
+    now_wib = datetime.datetime.now(WIB)
+    print(f"DEBUG UTC: {now_utc}")
+    print(f"DEBUG WIB: {now_wib}")
     text = update.message.text.strip().upper()
 
     # ======================
