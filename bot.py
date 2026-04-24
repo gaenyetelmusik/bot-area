@@ -30,12 +30,12 @@ def handle_message(update, context):
 
         if result:
             balasan = f"""
-KODETOKO : {result[0]}
-NAMATOKO : {result[1]}
+Kode Toko : {result[0]}
+Nama Toko : {result[1]}
 ASPV     : {result[2]}
 AMGR     : {result[3]}
-ALAMAT   : {result[4]}
-JAM      : {result[5]}
+Alamat   : {result[4]}
+Jam Buka : {result[5]}
 KORDINAT : {result[6]}
 """
         else:
@@ -232,7 +232,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
             "AREA KODETOKO\n"
             "EVEN KODETOKO\n"
             "TODAYEVEN\n"
-            "DAYEVEN 212"
+            "DAYEVEN TGL"
         )
 
 
