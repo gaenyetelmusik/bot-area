@@ -232,7 +232,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
             "AREA KODETOKO\n"
             "EVEN KODETOKO\n"
             "TODAYEVEN\n"
-            "DAYEVEN 21"
+            "DAYEVEN 212"
         )
 
 
