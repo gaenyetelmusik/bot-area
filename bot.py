@@ -252,13 +252,22 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 conn.close()
                 
                 if results:
-                    balasan = f"📊 DATA TRENSO - {kdtk}\n"
+                    # Ambil nama toko dari record pertama (semua record seharusnya sama)
+                    nama_toko = results[0][1] if results[0][1] else "-"
+                    
+                    # Header dengan nama toko
+                    balasan = f"📊 DATA TRENSO - {kdtk} : {nama_toko}\n"
                     balasan += "────────────────────────────────────────────────────────────\n"
                     balasan += "No TGL SO    | BLN SO | RP_NKL     | RP_GANTI_NKL\n"
                     balasan += "────────────────────────────────────────────────────────────\n"
                     
                     for i, row in enumerate(results, 1):
                         tgl_so = row[2] if row[2] else "-"
+                        # Format tanggal dari YYYY-MM-DD ke DD/MM/YYYY
+                        if tgl_so != "-" and "-" in tgl_so:
+                            parts_tgl = tgl_so.split("-")
+                            tgl_so = f"{parts_tgl[2]}/{parts_tgl[1]}/{parts_tgl[0]}"
+                        
                         bulan_so = row[3] if row[3] else "-"
                         rp_nkl = f"{row[4]:,.0f}" if row[4] else "0"
                         rp_ganti = f"{row[5]:,.0f}" if row[5] else "0"
