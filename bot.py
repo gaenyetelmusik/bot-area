@@ -233,7 +233,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
         parts = text.split()
         
         if len(parts) >= 2:
-            kdtk = parts[1].upper()  # contoh: THH2, THH3, THH5, dll
+            kdtk = parts[1].upper()
             
             try:
                 conn = sqlite3.connect("TRENSO_FIXED.DB")
@@ -252,7 +252,6 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 conn.close()
                 
                 if results:
-                    # Header tabel
                     balasan = f"📊 DATA TRENSO - {kdtk}\n"
                     balasan += "────────────────────────────────────────────────────────────\n"
                     balasan += "No TGL SO    | BLN SO | RP_NKL     | RP_GANTI_NKL\n"
@@ -269,7 +268,6 @@ JADWAL KIRIM: {result[3]} {result[4]}
                     balasan += "────────────────────────────────────────────────────────────\n"
                     balasan += f"✅ Total: {len(results)} record"
                     
-                    # Batasi jika kepanjangan
                     if len(balasan) > 4000:
                         balasan = balasan[:4000] + "\n\n... (data terpotong)"
                 else:
@@ -282,7 +280,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
         else:
             update.message.reply_text("❌ Format salah! Gunakan: TRENSONE KDTK")
 
-        else:
+    else:
         update.message.reply_text(
             "Format tidak dikenali.\nGunakan:\n"
             "AREA KODETOKO\n"
