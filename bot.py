@@ -244,7 +244,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 FROM TRENSO 
                 WHERE KDTK = ?
                 ORDER BY BULAN_SO DESC 
-                LIMIT 12
+                LIMIT 13
                 """
                 
                 cursor.execute(query, (kdtk,))
