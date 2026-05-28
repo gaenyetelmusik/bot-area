@@ -244,7 +244,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 FROM TRENSO 
                 WHERE KDTK = ?
                 ORDER BY BULAN_SO DESC 
-                LIMIT 100
+                LIMIT 12
                 """
                 
                 cursor.execute(query, (kdtk,))
@@ -296,7 +296,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
             "EVEN KODETOKO\n"
             "TODAYEVEN\n"
             "DAYEVEN 21\n"
-            "TRENSONE KDTK"
+            "TRENSO"
         )
 
 
