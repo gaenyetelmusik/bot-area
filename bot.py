@@ -244,7 +244,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 FROM TRENSO 
                 WHERE KDTK = ?
                 ORDER BY BULAN_SO DESC 
-                LIMIT 24
+                LIMIT 100
                 """
                 
                 cursor.execute(query, (kdtk,))
@@ -258,7 +258,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                     # Header dengan nama toko
                     balasan = f"📊 DATA TRENSO - {kdtk} : {nama_toko}\n"
                     balasan += "──────────────────────────────────────────────────────────────────────\n"
-                    balasan += "No TGL SO    | BLN SO | SOTIME   | RP_NKL     | RP_GANTI_NKL\n"
+                    balasan += "│ No │ TGL SO    │ BLN SO │ SOTIME   │ RP_NKL     │ RP_GANTI_NKL │\n"
                     balasan += "──────────────────────────────────────────────────────────────────────\n"
                     
                     for i, row in enumerate(results, 1):
@@ -273,7 +273,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                         rp_nkl = f"{row[5]:,.0f}" if row[5] else "0"
                         rp_ganti = f"{row[6]:,.0f}" if row[6] else "0"
                         
-                        balasan += f"{i:2} {tgl_so} | {bulan_so} | {sotime:8} | {rp_nkl:>10} | {rp_ganti:>12}\n"
+                        balasan += f"│ {i:2} │ {tgl_so} │ {bulan_so} │ {sotime:8} │ {rp_nkl:>10} │ {rp_ganti:>12} │\n"
                     
                     balasan += "──────────────────────────────────────────────────────────────────────\n"
                     balasan += f"✅ Total: {len(results)} record"
