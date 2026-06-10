@@ -257,9 +257,9 @@ JADWAL KIRIM: {result[3]} {result[4]}
                     
                     # Header dengan nama toko
                     balasan = f"📊 DATA TRENSO - {kdtk} : {nama_toko}\n"
-                    balasan += "──────────────────────────────────────────────────────────────────────\n"
+                    balasan += "─────────────────────────────────────────────\n"
                     balasan += "No│TGL SO    │BLN SO│SOTIME  │RP_NKL    │RP_GANTI_NKL│\n"
-                    balasan += "──────────────────────────────────────────────────────────────────────\n"
+                    balasan += "─────────────────────────────────────────────\n"
                     
                     for i, row in enumerate(results, 1):
                         tgl_so = row[2] if row[2] else "-"
@@ -275,7 +275,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                         
                         balasan += f"{i}│{tgl_so}│{bulan_so}│{sotime}│{rp_nkl:>10}│{rp_ganti:>12}│\n"
                     
-                    balasan += "──────────────────────────────────────────────────────────────────────\n"
+                    balasan += "─────────────────────────────────────────────\n"
                     balasan += f"✅ Total: {len(results)} record"
                     
                     if len(balasan) > 4000:
