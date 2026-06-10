@@ -240,7 +240,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 cursor = conn.cursor()
                 
                 query = """
-                SELECT KDTK, NAMA, TGL_SO, BULAN_SO, RP_NKL, RP_GANTI_NKL 
+                SELECT KDTK, NAMA, TGL_SO, BULAN_SO, SOTIME, RP_NKL, RP_GANTI_NKL 
                 FROM TRENSO 
                 WHERE KDTK = ?
                 ORDER BY BULAN_SO DESC 
@@ -252,14 +252,14 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 conn.close()
                 
                 if results:
-                    # Ambil nama toko dari record pertama (semua record seharusnya sama)
+                    # Ambil nama toko dari record pertama
                     nama_toko = results[0][1] if results[0][1] else "-"
                     
                     # Header dengan nama toko
                     balasan = f"📊 DATA TRENSO - {kdtk} : {nama_toko}\n"
-                    balasan += "─────────────────────────────────────────────\n"
-                    balasan += "No TGL SO    | BLN SO | RP_NKL     | RP_GANTI_NKL\n"
-                    balasan += "─────────────────────────────────────────────\n"
+                    balasan += "──────────────────────────────────────────────────────────────────────\n"
+                    balasan += "No TGL SO    | BLN SO | SOTIME   | RP_NKL     | RP_GANTI_NKL\n"
+                    balasan += "──────────────────────────────────────────────────────────────────────\n"
                     
                     for i, row in enumerate(results, 1):
                         tgl_so = row[2] if row[2] else "-"
@@ -269,12 +269,13 @@ JADWAL KIRIM: {result[3]} {result[4]}
                             tgl_so = f"{parts_tgl[2]}/{parts_tgl[1]}/{parts_tgl[0]}"
                         
                         bulan_so = row[3] if row[3] else "-"
-                        rp_nkl = f"{row[4]:,.0f}" if row[4] else "0"
-                        rp_ganti = f"{row[5]:,.0f}" if row[5] else "0"
+                        sotime = row[4] if row[4] else "-"
+                        rp_nkl = f"{row[5]:,.0f}" if row[5] else "0"
+                        rp_ganti = f"{row[6]:,.0f}" if row[6] else "0"
                         
-                        balasan += f"{i:2} {tgl_so} | {bulan_so} | {rp_nkl:>10} | {rp_ganti:>12}\n"
+                        balasan += f"{i:2} {tgl_so} | {bulan_so} | {sotime:8} | {rp_nkl:>10} | {rp_ganti:>12}\n"
                     
-                    balasan += "─────────────────────────────────────────────\n"
+                    balasan += "──────────────────────────────────────────────────────────────────────\n"
                     balasan += f"✅ Total: {len(results)} record"
                     
                     if len(balasan) > 4000:
@@ -288,7 +289,6 @@ JADWAL KIRIM: {result[3]} {result[4]}
             update.message.reply_text(balasan)
         else:
             update.message.reply_text("❌ Format salah! Gunakan: TRENSONE KDTK")
-
     else:
         update.message.reply_text(
             "Format tidak dikenali.\nGunakan:\n"
