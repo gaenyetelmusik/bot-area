@@ -151,7 +151,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                 balasan += "=" * 30 + "\n\n"
                 
                 for row in results:
-                    balasan += f"🏪 {row[0]} - {row[1]}\n"
+                    balasan += f" {row[0]} - {row[1]}\n"
                 
                 balasan += f"\n✅ Total toko: {len(results)}"
             else:
@@ -213,7 +213,7 @@ JADWAL KIRIM: {result[3]} {result[4]}
                     balasan += "=" * 35 + "\n\n"
                     
                     for row in results:
-                        balasan += f" {row[0]} - {row[1]}\n"
+                        balasan += f"🏪 {row[0]} - {row[1]}\n"
                     
                     balasan += f"\n✅ Total toko: {len(results)}"
                 else:
